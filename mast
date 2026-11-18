@@ -26,4 +26,56 @@ function DishCard({ dish, onPress }: any) {
   );
 }
 
+function HomeScreen({ navigation, menu }: any) {
+  const [search, setSearch] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('All');
+  const courses = ['All', 'Starter', 'Main Course', 'Dessert'];
+  // filter the menu by the search text and the chosen course
+  const filteredMenu = menu.filter((dish: any) => {
+    const matchesName = dish.name.toLowerCase().includes(search.toLowerCase());
+    const matchesCourse = selectedCourse === 'All' || dish.course === selectedCourse;
+    return matchesName && matchesCourse;
+  });
+  const clearFilters = () => {
+    setSearch('');
+    setSelectedCourse('All');
+  };
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Search by dish name"
+        value={search}
+        onChangeText={setSearch}
+      />
+      <View style={styles.filterRow}>
+        {courses.map((course) => (
+          <TouchableOpacity
+            key={course}
+            style={[styles.filterButton, selectedCourse === course && styles.filterSelected]}
+            onPress={() => setSelectedCourse(course)}
+          >
+            <Text style={selectedCourse === course ? styles.filterTextSelected : styles.filterText}>
+              {course}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <TouchableOpacity onPress={clearFilters}>
+        <Text style={styles.clearText}>Clear search and filter</Text>
+      </TouchableOpacity>
+      <FlatList
+        data={filteredMenu}
+        keyExtractor={(item: any) => item.id}
+        renderItem={({ item }: any) => (
+          <DishCard dish={item} onPress={() => navigation.navigate('Details', { dish: item })} />
+        )}
+        ListEmptyComponent={<Text style={styles.empty}>No menu items found.</Text>}
+      />
+      <MyButton title="Add Dish" onPress={() => navigation.navigate('AddEdit')} />
+      <MyButton title="View Statistics" color="#1E293B" onPress={() => navigation.navigate('Stats')} />
+    </View>
+  );
+}
+
 
