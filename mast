@@ -78,4 +78,41 @@ function HomeScreen({ navigation, menu }: any) {
   );
 }
 
+function AddEditScreen({ navigation, route, addDish, updateDish }: any) {
+ const dishToEdit = route.params?.dish;
+  const [name, setName] = useState(dishToEdit ? dishToEdit.name : '');
+  const [description, setDescription] = useState(dishToEdit ? dishToEdit.description : '');
+  const [course, setCourse] = useState(dishToEdit ? dishToEdit.course : '');
+  const [price, setPrice] = useState(dishToEdit ? String(dishToEdit.price) : '');
+  const courses = ['Starter', 'Main Course', 'Dessert'];
+  const saveDish = () => {
+
+     if (name.trim() === '') {
+      Alert.alert('Error', 'Please enter the dish name.');
+      return;
+    }
+    if (description.trim() === '') {
+      Alert.alert('Error', 'Please enter a description.');
+      return;
+    }
+    if (course === '') {
+      Alert.alert('Error', 'Please select a course.');
+      return;
+    }
+    if (price.trim() === '' || isNaN(Number(price)) || Number(price) <= 0) {
+      Alert.alert('Error', 'Please enter a valid price (a number greater than 0).');
+      return;
+    }
+    if (dishToEdit) {
+      updateDish({
+        id: dishToEdit.id,
+        name: name,
+        description: description,
+        course: course,
+        price: Number(price),
+      });
+      Alert.alert('Success', 'Dish updated!');
+    } else {
+      addDish({
+        id: Date.now().toString(),
 
