@@ -3,3 +3,15 @@ import {View,Text,TextInput,FlatList,ScrollView,TouchableOpacity,Alert,StatusBar
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
+
+function MyButton({ title, onPress, color }: any) {
+  return (
+    <TouchableOpacity
+      style={[styles.button, { backgroundColor: color || '#2563EB' }]}
+      onPress={onPress}
+    >
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
+  );
+}
+
